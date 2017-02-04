@@ -1,0 +1,117 @@
+<link rel="import" href="../polymer/polymer.html">
+
+<script>
+(function() {
+	'use strict';
+
+	window.D2L = window.D2L || {};
+	window.D2L.PolymerBehaviors = window.D2L.PolymerBehaviors || {};
+
+	/**
+	 * @polymerBehavior
+	 */
+	window.D2L.PolymerBehaviors.ButtonBehavior = [
+		/**
+		 * @polymerBehavior
+		 */
+		{
+			properties: {
+				autofocus: {
+					type: Boolean,
+					observer: '_autofocusChanged',
+					reflectToAttribute: true
+				},
+				disabled: {
+					type: Boolean,
+					observer: '_disabledChanged',
+					reflectToAttribute: true
+				},
+				tabIndex: {
+					type: String,
+					observer: '_tabIndexChanged',
+					reflectToAttribute: true
+				},
+				type: {
+					type: String,
+					observer: '_typeChanged',
+					reflectToAttribute: true
+				}
+			},
+
+			ready: function d2lButtonReady() {
+				this._button = this.$$('button');
+
+				// Transfer our properties to the inner button
+				this._button.autofocus = this.autofocus;
+				this._button.disabled = this.disabled;
+
+
+				// this is the Polymer property, and not the standard tabIndex
+				if (this.tabIndex) {
+					this._button.tabIndex = this.tabIndex;
+				}
+
+				if (this.type) {
+					this._button.type = this.type;
+				} else {
+					// ideally this would just be a getter instead of actually setting the property,
+					// but apparently that's not a thing in Polymer
+					this.type = this._button.type;
+				}
+			},
+
+			focus: function d2lButtonFocus() {
+				if (!this.isAttached
+					|| this.disabled
+				) {
+					return;
+				}
+
+				this._button.focus();
+			},
+
+			blur: function d2lButtonBlur() {
+				if (!this.isAttached) {
+					return;
+				}
+
+				this._button.blur();
+			},
+
+			_autofocusChanged: function d2lButtonAutofocusChanged(value) {
+				if (!this.isAttached) {
+					return;
+				}
+
+				this._button.autofocus = value;
+			},
+
+			_disabledChanged: function d2lButtonDisabledChanged(value) {
+				if (!this.isAttached) {
+					return;
+				}
+
+				this._button.disabled = value;
+			},
+
+			_tabIndexChanged: function d2lButtonTabIndexChanged(value) {
+				if (!this.isAttached) {
+					return;
+				}
+
+				this._button.tabIndex = value;
+			},
+
+			_typeChanged: function d2lButtonTypeChanged(value) {
+				if (!this.isAttached
+					|| this._button.type === value // avoid adding an explicit default to the button
+				) {
+					return;
+				}
+
+				this._button.type = value;
+			}
+		}
+	];
+})();
+</script>

@@ -15,7 +15,8 @@
   "dependencies": {
     "d2l-colors": "^2.2.3",
     "polymer": "^1.7.0",
-    "iron-media-query": "^1.0.8"
+    "iron-media-query": "^1.0.8",
+    "d2l-fastdom-import": "https://github.com/Brightspace/fastdom-import.git#^1.0.2"
   },
   "devDependencies": {
     "d2l-demo-template": "~0.0.8",

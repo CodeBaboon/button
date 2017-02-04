@@ -1,5 +1,6 @@
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../d2l-colors/d2l-colors.html">
+<link rel="import" href="../d2l-fastdom-import/fastdom.html"><script>/* global fastdom */</script>
 <link rel="import" href="../iron-media-query/iron-media-query.html">
 <link rel="import" href="d2l-button-shared-styles.html">
 
@@ -127,62 +128,90 @@
 			},
 
 			_reposition: function() {
-
-				var containerRect = this._container.getBoundingClientRect();
-				this._spacer.style.height = containerRect.height + 'px';
-
-				var spacerRect = this._spacer.getBoundingClientRect();
-
-				var containerTop;
-				var bodyScrollTop = document.body.scrollTop;
 				var isFloating = this._container.classList.contains('d2l-floating-buttons-floating');
-				if (isFloating) {
-					containerTop = spacerRect.top + bodyScrollTop;
-				} else {
-					containerTop = containerRect.top + bodyScrollTop;
-				}
-
-				var viewBottom = bodyScrollTop + window.innerHeight;
-
 				var innerContainer = this._container.querySelector('div');
 
-				if (this._heightAtMost500px || ((containerTop + containerRect.height) <= viewBottom)) {
+				// the viewport size is too small for floating
+				if (this._heightAtMost500px) {
+					if (isFloating) {
+						fastdom.mutate(d2lFloatingRepositionUnfloat, this);
+					}
+					return;
+				}
 
-					if (!isFloating) {
-						return;
+				fastdom.measure(function d2lFloatingRespotionMeasure1() {
+					if (!this.isAttached) return;
+
+					var containerRect = this._container.getBoundingClientRect();
+					var bodyScrollTop = document.body.scrollTop;
+					var viewBottom = bodyScrollTop + window.innerHeight;
+
+					if (isFloating) {
+						var targetSpacerHeightStyle = containerRect.height + 'px';
+						if (this._spacer.style.height === targetSpacerHeightStyle) {
+							containerRect = this._spacer.getBoundingClientRect();
+						} else {
+							fastdom.mutate(function d2lFloatingRepositionMutate1() {
+								if (!this.isAttached) return;
+
+								this._spacer.style.height = containerRect.height + 'px';
+
+								fastdom.measure(function d2lFloatingRepositionMeasure2() {
+									if (!this.isAttached) return;
+
+									containerRect = this._spacer.getBoundingClientRect();
+
+									fastdom.mutate(d2lFloatingRepositionMutateFinal, this);
+								}, this);
+							}, this);
+							return;
+						}
 					}
 
+					fastdom.mutate(d2lFloatingRepositionMutateFinal, this);
+
+					function d2lFloatingRepositionMutateFinal() {
+						if (!this.isAttached) return;
+
+						var containerTop = containerRect.top + bodyScrollTop;
+						var shouldFloat = containerTop + containerRect.height > viewBottom;
+						if (!shouldFloat) {
+							if (isFloating) {
+								d2lFloatingRepositionUnfloat.call(this);
+							}
+							return;
+						}
+
+						this._container.classList.add('d2l-floating-buttons-floating');
+						this._spacer.style.display = 'block';
+						if (Math.abs(innerContainer.style.width.replace('px', '') - containerRect.width) > 1) {
+							innerContainer.style.width = containerRect.width + 'px';
+						}
+						if (!this._isRTL) {
+							if (Math.abs(innerContainer.style.left.replace('px', '') - containerRect.left) > 1) {
+								innerContainer.style.left = containerRect.left + 'px';
+							}
+						} else {
+							if (Math.abs(innerContainer.style.right.replace('px', '') - containerRect.left) > 1) {
+								innerContainer.style.right = containerRect.left + 'px';
+							}
+						}
+					}
+				}, this);
+
+				function d2lFloatingRepositionUnfloat() {
+					if (!this.isAttached) return;
+
 					this._container.classList.remove('d2l-floating-buttons-floating');
+					this._spacer.style.display = 'none';
+					innerContainer.style.width = 'auto';
+
 					if (!this._isRTL) {
 						innerContainer.style.left = 0 + 'px';
 					} else {
 						innerContainer.style.right = 0 + 'px';
 					}
-
-					this._spacer.style.display = 'none';
-					innerContainer.style.width = 'auto';
-
-				} else {
-
-					this._container.classList.add('d2l-floating-buttons-floating');
-					this._spacer.style.display = 'block';
-
-					var updateWithRect = isFloating ? spacerRect : containerRect;
-					if (!this._isRTL) {
-						if (Math.abs(innerContainer.style.left.replace('px', '') - updateWithRect.left) > 1) {
-							innerContainer.style.left = updateWithRect.left + 'px';
-						}
-					} else {
-						if (Math.abs(innerContainer.style.right.replace('px', '') - updateWithRect.left) > 1) {
-							innerContainer.style.right = updateWithRect.left + 'px';
-						}
-					}
-					if (Math.abs(innerContainer.style.width.replace('px', '') - updateWithRect.width) > 1) {
-						innerContainer.style.width = updateWithRect.width + 'px';
-					}
-
 				}
-
 			}
 		});
 	</script>

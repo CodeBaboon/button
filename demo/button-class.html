@@ -1,0 +1,35 @@
+<!doctype html>
+<html>
+<head>
+	<title>d2l-button</title>
+	<script src="https://s.brightspace.com/lib/webcomponentsjs/0.7.21/webcomponents.min.js"></script>
+	<link rel="import" href="../../d2l-demo-template/d2l-demo-template.html">
+
+	<link rel="import" href="../d2l-button-class.html">
+	<style is="custom-style" include="d2l-button-class"></style>
+</head>
+<body unresolved>
+
+	<d2l-demo-template title="d2l-button">
+		<div class="d2l-demo-fixture">
+			<button class="d2l-button">Normal Button</button>
+			<button class="d2l-button" primary>Primary Button</button>
+			<button-class-demo-component></button-class-demo-component>
+		</div>
+	</d2l-demo-template>
+
+	<dom-module id="button-class-demo-component">
+		<template>
+			<style include="d2l-button-class"></style>
+			<button class="d2l-button">Normal Button in Component</button>
+			<button class="d2l-button" primary>Primary Button in Component</button>
+		</template>
+		<script>
+			Polymer({
+				is: 'button-class-demo-component'
+			});
+		</script>
+	</dom-module>
+
+</body>
+</html>

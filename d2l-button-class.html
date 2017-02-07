@@ -1,0 +1,37 @@
+<link rel="import" href="d2l-button-mixins.html">
+
+<dom-module id="d2l-button-class">
+	<template>
+		<style include="d2l-button-mixins">
+			.d2l-button {
+				@apply(--d2l-button-base);
+			}
+			.d2l-button::-moz-focus-inner {
+				@apply(--d2l-button-moz-focus-inner);
+			}
+			.d2l-button:hover,
+			.d2l-button:focus {
+				@apply(--d2l-button-focused);
+			}
+			.d2l-button[disabled] {
+				@apply(--d2l-button-disabled);
+			}
+			.d2l-button[disabled]:hover,
+			.d2l-button[disabled]:focus {
+				@apply(--d2l-button-focused-disabled);
+			}
+
+			.d2l-button[primary] {
+				@apply(--d2l-button-primary-base);
+			}
+			.d2l-button[primary]:hover,
+			.d2l-button[primary]:focus {
+				@apply(--d2l-button-primary-focused);
+			}
+			.d2l-button[primary][disabled]:hover,
+			.d2l-button[primary][disabled]:focus {
+				@apply(--d2l-button-primary-focused-disabled);
+			}
+		</style>
+	</template>
+</dom-module>

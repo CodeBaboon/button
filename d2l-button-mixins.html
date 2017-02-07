@@ -1,0 +1,87 @@
+<link rel="import" href="../d2l-colors/d2l-colors.html">
+
+<dom-module id="d2l-button-mixins">
+	<template>
+		<style>
+			:host {
+				--d2l-button-base: {
+					border-width: 1px;
+					border-style: solid;
+					border-radius: 0.3rem;
+					box-sizing: border-box;
+					cursor: pointer;
+					display: inline-block;
+					font-family: inherit;
+					font-size: 0.7rem;
+					font-weight: 700;
+					letter-spacing: 0.02rem;
+					line-height: 1rem;
+					margin: 0;
+					min-height: -webkit-calc(2rem + 2px);
+					min-height: calc(2rem + 2px);
+					outline: none;
+					padding: 0.5rem 1.5rem;
+					text-align: center;
+					-webkit-user-select: none;
+					-moz-user-select: none;
+					-ms-user-select: none;
+					user-select: none;
+					vertical-align: middle;
+					white-space: nowrap;
+					width: auto;
+
+					@apply(--d2l-button-base-coloring);
+
+					/* overrides */
+					@apply(--d2l-button);
+				}
+				/* Firefox includes a hidden border which messes up button dimensions */
+				--d2l-button-moz-focus-inner: {
+					border: 0;
+				}
+				--d2l-button-focused: {
+					background-color: var(--d2l-color-gypsum);
+
+					/* overrides */
+					@apply(--d2l-button-hover);
+				}
+				--d2l-button-disabled: {
+					opacity: 0.5;
+					cursor: default;
+				}
+				--d2l-button-focused-disabled: {
+					@apply(--d2l-button-base-coloring);
+				}
+
+				--d2l-button-primary-base: {
+					@apply(--d2l-button-primary-base-coloring);
+
+					/* overrides */
+					@apply(--d2l-button-primary);
+				}
+				--d2l-button-primary-focused: {
+					background-color: var(--d2l-color-celestuba);
+
+					/* overrides */
+					@apply(--d2l-button-primary-hover);
+				}
+				--d2l-button-primary-focused-disabled: {
+					@apply(--d2l-button-primary-base-coloring);
+				}
+				
+				--d2l-button-base-coloring: {
+					background-color: var(--d2l-color-woolonardo);
+					border-color: var(--d2l-color-titanius);
+					color: var(--d2l-color-ferrite);
+				}
+
+				--d2l-button-primary-base-coloring: {
+					background-color: var(--d2l-color-celestine);
+					border-color: var(--d2l-color-celestuba);
+					color: var(--d2l-color-white);
+					@apply(--d2l-button-primary);
+				}
+			}
+		</style>
+	</template>
+</dom-module>
